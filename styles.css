@@ -1,0 +1,596 @@
+/* === Settings === */
+.setting-item-description {
+    font-size: var(--font-ui-small);
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+/* === Metadata Search Section === */
+.book-metadata-section {
+	display: flex;
+	flex-direction: row;
+	gap: 20px;
+	align-items: flex-start;
+	flex-wrap: wrap;
+}
+
+/* --- Update Banner --- */
+.book-update-exit-btn {
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer;
+  margin-left: 12px;
+}
+
+.book-metadata-banner {
+    padding: 8px 12px;
+    background-color: #fff9c4; 
+    border: 2px solid #fdd835; 
+    border-radius: 5px;
+    margin-bottom: 12px;
+    font-weight: bold;
+    color: #000;
+}
+
+/* --- Search Fields --- */
+/* Note: A wrapper consists of a label and an input field */
+.label-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-labels {
+    font-weight: bold;
+    font-size: var(--font-ui-small);
+    display: block;
+    margin: 5px 0;
+}
+
+input.textbox {
+  border: 1px solid var(--background-modifier-border) !important;
+  padding: 16px 10px !important;
+  border-radius: 6px !important;
+  background-color: var(--background-primary) !important;
+  box-sizing: border-box;
+  min-width: 150px;   
+}
+
+input.textbox.longer-field {
+    width: 350px;
+}
+
+input.textbox:hover,
+.dropdown-label:hover {
+    border-color: var(--text-accent) !important;
+}
+
+input.textbox:focus {
+    outline: none;
+    border-color: var(--text-accent) !important;
+    box-shadow: 0 0 0 1px var(--text-accent);
+}
+
+/* ---  Select Provider Dropdown --- */
+.multi-select-dropdown {
+	position: relative;
+	width: 240px;
+}
+
+.dropdown-label {
+	padding: 6px 10px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	cursor: pointer;
+	background-color: var(--background-primary);
+	transition: border-color 0.15s ease;
+    font-size: 14px;
+}
+
+.multi-select-dropdown .dropdown-label.placeholder {
+	color: var(--text-faint);   
+}
+
+.dropdown-label:hover {
+	border-color: var(--text-accent);
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	border: 1px solid var(--background-modifier-border);
+	background-color: var(--background-primary);
+	border-radius: 6px;
+	padding: 6px;
+	z-index: 20;
+	box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.dropdown-option label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px;
+	cursor: pointer;
+	width: 100%;
+}
+
+.dropdown-option label:hover {
+	background-color: var(--background-modifier-hover);
+	border-radius: 4px;
+}
+
+/* --- Search button --- */
+.search-row {          
+    margin: 28px 0 0 0 !important;
+}
+
+.search-button {
+  padding: 16px 24px;
+}
+
+.search-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none; 
+  background-color: var(--background-modifier-surface);
+  color: var(--text-faint);
+}
+
+/* --- Info Icon for ISBN --- */
+.info-icon {
+    font-size: 10px;
+    cursor: help;
+    color: var(--text-muted);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%; 
+    border: 1px solid var(--background-modifier-border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-icon:hover {
+    color: var(--text-accent);
+}
+
+/* --- Empty Section --- */
+/* Note: If no search results are found */
+.empty-state {
+  display: none; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  width: 100%;
+  height: 50%;
+  text-align: center;
+  color: var(--text-faint);
+}
+
+.empty-state.visible {
+  display: flex; 
+  position: unset;
+  gap: 5px;
+}
+
+/* --- Search Results Section --- */
+/* Note: Container for displaying total count badge and provider buttons */
+.search-results-section {
+    margin-top: 30px;
+    border: 1px solid var(--background-modifier-border); 
+    border-radius: 8px;      
+    padding: 12px;           
+    background-color: var(--background-primary); 
+}
+
+.search-results-header {
+    display: flex;
+    align-items: center;
+}
+
+.search-results-header h2 {
+    margin: 0;
+    font-size: var(--font-ui-medium);
+}
+
+.total-count-badge {
+    display: inline-flex;               
+    align-items: center;
+    justify-content: center;
+    padding: 2px 8px;                   
+    font-size: var(--font-ui-smaller);
+    color: var(--text-accent);          
+    border: 1px solid var(--text-accent); 
+    border-radius: 12px;                
+    background-color: var(--background-primary); 
+    margin-left: 12px;
+    font-weight: var(--font-thin);
+}
+
+.provider-buttons-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.provider-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--background-modifier-border);
+    background-color: var(--background-primary);
+    cursor: pointer;
+    font-size: var(--font-ui-small);
+}
+
+.provider-button:hover {
+    border-color: var(--text-accent);
+    background-color: var(--background-modifier-hover);
+}
+
+.provider-button.selected {
+    border-color: var(--text-accent);
+    background-color: var(--background-modifier-hover); /* or a slightly darker bg */
+}
+
+/* Badge inside the button */
+/* Note: This is a small numeric indicator within each provider button */
+.provider-badge {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--text-accent);
+    color: var(--background-primary);
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+/* ---- Book Cards --- */
+.book-results-section {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.book-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    padding: 8px;
+    background-color: var(--background-primary);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.book-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--interactive-accent-hover)
+}
+
+.book-card-cover {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.book-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.book-title {
+    font-weight: bold;
+    font-size: 0.9em;
+    color: var(--text-normal);
+}
+
+.book-provider {
+    font-size: 0.75em;
+}
+.book-provider.goodreads {
+  color: #75420e;
+}
+.book-provider.openlibrary {
+  color: #ff9900;
+}
+.book-provider.google {
+  color: #4285f4;
+}
+
+.book-author {
+  font-size: 0.8em;
+  font-style: italic;
+  color: var(--text-normal);
+}
+
+.book-year {
+  font-size: 0.75em;
+  color: var(--text-muted);
+}
+
+.book-description {
+  font-size: 0.75em;
+}
+
+/* ---- Book Search --- */
+/* Note: Main container for the book search view */
+.book-view-container {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  font-family: inherit;
+}
+
+.book-main {
+  display: flex;
+  gap: 20px;
+}
+
+.provider-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 999px;
+  background: transparent;
+  width: fit-content;
+  margin-bottom: 12px;
+}
+.provider-pill.goodreads {
+  border: 1.5px solid #75420e;
+  color: #75420e;
+}
+.provider-pill.goodreads:hover {
+  background-color: #75420e;
+  color: white;
+  transform: translateY(-1px);
+}
+.provider-pill.openlibrary {
+  border: 1.5px solid #d68307;
+  color: #d68307;
+}
+.provider-pill.openlibrary:hover {
+  background-color: #d68307;
+  color: white;
+  transform: translateY(-1px);
+}
+.provider-pill.google {
+  border: 1.5px solid #4285f4;
+  color: #4285f4;
+}
+.provider-pill.google:hover {
+  background-color: #4285f4;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* --- Left: cover --- */
+.book-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.book-cover {
+  width: 250px !important;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* --- Right: metadata ---*/
+.book-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* --- Text fields ---*/
+.field-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-weight: var(--font-medium);
+  font-size: var(--font-ui-medium);
+  display: flex;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+/* --- Description textarea --- */
+.description-textarea {
+  width: 100%;
+  height: 120px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+/* Buttons */
+.save-wrapper {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: end;
+}
+
+.save-btn {
+  background-color: var(--color-green) !important;
+  color: white !important;
+  border-radius: 4px;
+  padding: 4px 10px;
+}
+
+.reset-btn {
+  background-color: var(--color-red) !important;
+  color: white !important;
+  border-radius: 4px;
+  padding: 4px 10px;
+}
+
+.reset-cover-btn {
+  border-radius: 4px;
+  padding: 4px 10px;
+}
+
+.reset-section-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.add-btn {
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 0.85em;
+  margin-top: 8px;
+}
+
+.delete-btn {
+  background-color: var(--color-red) !important;
+  color: white !important;
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 0.85em;
+}
+
+.reset-btn,
+.delete-btn,
+.save-btn {
+  transition: background-color 0.15s ease,
+              opacity 0.15s ease;
+  cursor: pointer;
+}
+
+.reset-btn:hover, .delete-btn:hover, .save-btn:hover {
+  opacity: 0.85;
+}
+
+/* === Book Update View ===*/
+/* Note: Main container for the book update view. 2 sections for fetching and displaying current book frontmatter */
+.book-update-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 8%;
+}
+
+.book-update-headers, .book-update-provider {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  padding-right: 60px;
+}
+
+.book-update-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto;
+  align-items: start;
+  margin-bottom: 12px;
+  gap: 12px;
+
+}
+
+.book-update-grid-item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* --- Chips --- */
+.book-update-chip-container {
+  border: 1px solid var(--background-modifier-border);
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.book-update-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 16px;
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  font-size: 12px;
+}
+
+.book-update-chip-remove {
+  margin-left: 6px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.book-update-chip-remove:hover {
+  color: var(--text-normal);
+}
+
+/* ---- Chip Input --- */
+.book-update-chip-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  min-width: 120px;
+  flex: 1;
+  font-size: 13px;
+}
+
+/* --- Field Labels --- */
+/* using .field-label */
+
+/* --- Buttons --- */
+/* using .reset-section-btn and .reset-cover-btn */
+
+/* --- Pills --- */
+/* using .provider-pill */
+
+/* --- Cover --- */
+/* using .book-cover */
+
+/* --- Text Fields --- */
+/* using .field-wrapper */
+
+/* --- Description --- */
+/* using .description-textarea */
+
+/* --- Save / Reset Buttons --- */
+/* using .save-wrapper, .save-btn and .reset-btn */
+
+

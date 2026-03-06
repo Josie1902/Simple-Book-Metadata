@@ -1,0 +1,11 @@
+{
+	"id": "simple-book-metadata",
+	"name": "Simple Book Metadata",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "A simple plugin that extract metadata for books from goodreads, google and openlibrary.",
+	"author": "Josie",
+	"authorUrl": "",
+	"fundingUrl": "",
+	"isDesktopOnly": true
+}
