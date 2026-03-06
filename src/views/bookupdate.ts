@@ -43,7 +43,7 @@ export class BookUpdateView extends ItemView {
   headersDiv.createEl("b", { text: "Current Metadata", cls: "book-update-grid-item" });
 
   // --- Provider Section ---
-  createProviderPills(mainDiv, this.provider, this.bookData.url, this.frontmatter.url);
+  const currentProvider =createProviderPills(mainDiv, this.provider, this.bookData.url, this.frontmatter.url);
 
   // --- Covers Section ---
   const currentCoverImg = createCoverSection(mainDiv, this.bookData, this.frontmatter, originalData);
@@ -62,8 +62,13 @@ export class BookUpdateView extends ItemView {
     { label: "URL", key: "url" },
   ];
   const inputComponents: Record<string, TextComponent | HTMLTextAreaElement> = {};
+  function getInputValue(input: TextComponent | HTMLTextAreaElement) {
+      return 'getValue' in input ? input.getValue() : input.value;
+  }
+
   textFields.forEach(field => {
-    inputComponents[field.key] = createTextField(textMetaDiv, field, this.bookData, this.frontmatter, originalData);
+      const component = createTextField(textMetaDiv, field, this.bookData, this.frontmatter, originalData);
+      inputComponents[field.key] = component;
   });
 
   // --- Description Section ---
@@ -96,9 +101,21 @@ export class BookUpdateView extends ItemView {
   saveBtn.setButtonText("🗁 Update");
   saveBtn.setClass("save-btn");
   saveBtn.onClick(async () => {
+    this.frontmatter.url = currentProvider.href;
+    this.frontmatter.cover = currentCoverImg.src
+    Object.entries(inputComponents).forEach(([key, component]) => {
+      this.frontmatter[key] = String(getInputValue(component));
+    });
+    this.frontmatter.description = String(getInputValue(inputComponents["description"]));
+    this.frontmatter.authors = authorsField.frontmatter.authors || []
+    this.frontmatter.genres = genresField.frontmatter.genres || []
+
+    if (!this.file) return new Notice("No file to update.");
+
     await this.app.fileManager.processFrontMatter(this.file, (fm) => {
       Object.assign(fm, this.frontmatter);
     });
+
     new Notice("Metadata updated successsfully!");
   });
 

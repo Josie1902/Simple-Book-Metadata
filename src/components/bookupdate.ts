@@ -127,7 +127,8 @@ export function createEditableChipField(
   return {
     renderChips,
     inputEl,
-    currentContainer
+    currentContainer,
+    frontmatter
   };
 }
 

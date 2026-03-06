@@ -36,6 +36,7 @@ export default class BookMetadataPlugin extends Plugin {
 					new Notice("No active file to update metadata for.");
 					return;
 				}
+
 				this.openBookMetadataTab(activeFile);
 			}
 		})
@@ -57,7 +58,7 @@ export default class BookMetadataPlugin extends Plugin {
 					submenu.addItem((item) => {
 						item.setTitle('Update Book Metadata in Current Note');
 						item.setIcon('pencil')
-						item.onClick(() => {
+						item.onClick(async () => {
 							const activeFile = this.app.workspace.getActiveFile();
 							if (!activeFile) {
 								new Notice("No active file to update metadata for.");
@@ -90,7 +91,7 @@ export default class BookMetadataPlugin extends Plugin {
 	            active: true,
 	            state: {
 					settings: this.settings,
-	                file: file ? { path: file.path, name: file.basename } : null,
+	                file: file,
 	                frontmatter
 	            }
 	        });
