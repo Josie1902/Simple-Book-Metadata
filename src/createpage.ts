@@ -19,7 +19,6 @@ export async function createBookPage(app: App, settings: BookMetadataPluginSetti
   if (!folderExists) {
     try {
       await app.vault.createFolder(folderPath);
-      console.log(`Created folder: ${folderPath}`);
     } catch (err) {
       new Notice("Failed to create folder.");
       console.error(err);
