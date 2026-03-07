@@ -72,7 +72,8 @@ export class BookUpdateView extends ItemView {
   });
 
   // --- Description Section ---
-  inputComponents["description"] = createDescriptionSection(mainDiv, this.bookData, this.frontmatter, originalData);
+  const desComponent = createDescriptionSection(mainDiv, this.bookData, this.frontmatter, originalData);
+  inputComponents["description"] = desComponent;
 
   // --- Authors Section ---
   const authorsField = createEditableChipField(
@@ -149,6 +150,8 @@ export class BookUpdateView extends ItemView {
       if (component instanceof TextComponent) component.setValue(val);
       else (component as HTMLTextAreaElement).value = val;
     });
+
+    desComponent.value = String(this.bookData.description || "");
 
     this.frontmatter.authors = [...(this.bookData.authors || [])];
     authorsField.renderChips(this.bookData);
