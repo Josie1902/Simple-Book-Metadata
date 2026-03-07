@@ -16,7 +16,13 @@ export async function scrapeBookDetails(item: any): Promise<Book> {
   const authors = volumeInfo.authors ? volumeInfo.authors : [];
   const publishedDate = volumeInfo.publishedDate || "";
   const description = cleanDescription(volumeInfo.description || "");
-  const cover = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : "https://bookstoreromanceday.org/wp-content/uploads/2020/08/book-cover-placeholder.png";
+  const imageUrl = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : "https://bookstoreromanceday.org/wp-content/uploads/2020/08/book-cover-placeholder.png";
+  const imageRes = await requestUrl({
+    url: imageUrl,
+    method: "GET"
+  });
+  const blob = new Blob([imageRes.arrayBuffer]);
+  const objectUrl = URL.createObjectURL(blob);
   const industryIdentifiers = volumeInfo.industryIdentifiers || [];
   const isbn13Obj = industryIdentifiers.find((id: any) => id.type === "ISBN_13");
   const isbn13 = isbn13Obj ? isbn13Obj.identifier : "";
@@ -35,7 +41,7 @@ export async function scrapeBookDetails(item: any): Promise<Book> {
       publisher,
       publicationDate: publishedDate,
       pages,
-      cover,
+      cover: objectUrl,
       genres,
       series,
       averageRating,
