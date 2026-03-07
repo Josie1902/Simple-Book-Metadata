@@ -43,7 +43,7 @@ export class BookUpdateView extends ItemView {
   headersDiv.createEl("b", { text: "Current Metadata", cls: "book-update-grid-item" });
 
   // --- Provider Section ---
-  const currentProvider =createProviderPills(mainDiv, this.provider, this.bookData.url, this.frontmatter.url);
+  const currentProvider = createProviderPills(mainDiv, this.provider, this.bookData, this.frontmatter);
 
   // --- Covers Section ---
   const currentCoverImg = createCoverSection(mainDiv, this.bookData, this.frontmatter, originalData);
@@ -101,7 +101,6 @@ export class BookUpdateView extends ItemView {
   saveBtn.setButtonText("🗁 Update");
   saveBtn.setClass("save-btn");
   saveBtn.onClick(async () => {
-    this.frontmatter.url = currentProvider.href;
     this.frontmatter.cover = currentCoverImg.src
     Object.entries(inputComponents).forEach(([key, component]) => {
       this.frontmatter[key] = String(getInputValue(component));
@@ -119,10 +118,7 @@ export class BookUpdateView extends ItemView {
     new Notice("Metadata updated successsfully!");
   });
 
-  const globalResetBtn = new ButtonComponent(buttonWrapper);
-  globalResetBtn.setButtonText("⟳ Reset All");
-  globalResetBtn.setClass("reset-btn");
-  globalResetBtn.onClick(() => {
+  const resetAllFields = () => {
     this.frontmatter = JSON.parse(JSON.stringify(originalData));
 
     textFields.forEach(field => {
@@ -140,9 +136,46 @@ export class BookUpdateView extends ItemView {
 
     currentCoverImg.src = originalData.cover || "";
     new Notice("All fields reset to original!");
-  });
-}
+  }
 
+  const transferAllFields = () => {
+    this.frontmatter = this.bookData;
+
+    currentProvider.updateCurrentPill(currentProvider.currentLink, this.bookData.url);
+
+    textFields.forEach(field => {
+      const val = String(this.bookData[field.key] || "");
+      const component = inputComponents[field.key];
+      if (component instanceof TextComponent) component.setValue(val);
+      else (component as HTMLTextAreaElement).value = val;
+    });
+
+    this.frontmatter.authors = [...(this.bookData.authors || [])];
+    authorsField.renderChips(this.bookData);
+
+    this.frontmatter.genres = [...(this.bookData.genres || [])];
+    genresField.renderChips(this.bookData);
+
+    currentCoverImg.src = this.bookData.cover || "";
+    new Notice("Metadata transferred from " + this.provider);
+  }
+
+  const globalResetBtn = new ButtonComponent(buttonWrapper);
+  globalResetBtn.setButtonText("⟳ Reset All");
+  globalResetBtn.setClass("reset-btn");
+  globalResetBtn.onClick(() => {
+     resetAllFields();
+  });
+
+  currentProvider.resetBtn.onClick(() => {
+    resetAllFields();
+  })
+
+  currentProvider.transferBtn.onClick(() => {
+    transferAllFields()
+  })
+
+}
 
   async onClose(): Promise<void> {}
 }

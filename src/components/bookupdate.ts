@@ -4,35 +4,63 @@ import { ButtonComponent, TextComponent } from "obsidian";
 export function createProviderPills(
   parent: HTMLElement,
   fetchedProvider: string,
-  fetchedUrl: string,
-  currentUrl: string,
+  bookData: Book,
+  frontmatter: Record<string, any>,
 ) {
 
+  function detectProvider(url: string | undefined) {
+    const providerNames = ["Goodreads", "Google", "OpenLibrary"]; 
+    return providerNames.find(provider =>
+      url?.toLowerCase().includes(provider.toLowerCase().replace(/\s+/g, ""))
+    ) ?? "Unknown";
+  }
+
+  function updateCurrentPill(link: HTMLAnchorElement, url: string | undefined) {
+    const provider = detectProvider(url);
+
+    link.textContent = provider;
+    link.href = url || "#";
+    link.className = `provider-pill ${provider.toLowerCase()}`;
+  }
+
   // --- Section Wrapper ---
-  const section = parent.createDiv({ cls: "book-update-provider" });
+  const section = parent.createDiv({ cls: "book-update-grid" });
 
   // --- Fetched Provider (Left) ---
   const fetchedDiv = section.createDiv({ cls: "book-update-grid-item" });
   const fetchedLink = fetchedDiv.createEl("a", {
     cls: `provider-pill ${fetchedProvider.toLowerCase()}`,
     text: fetchedProvider,
-    href: fetchedUrl || "#",
+    href: bookData.url || "#",
   });
   fetchedLink.setAttr("title", "Open in " + fetchedProvider);
 
+  // --- Transfer Button ---
+  const transferBtn = new ButtonComponent(section);
+  transferBtn.setIcon("chevrons-right");
+  transferBtn.setTooltip("Transfer all metadata from " + fetchedProvider);
 
   // --- Current Provider (Right) ---
   const currentDiv = section.createDiv({ cls: "book-update-grid-item" });
-  const providerNames = ["Goodreads", "Google", "OpenLibrary"]; 
-  const matchedProvider = providerNames.find(provider => currentUrl.toLowerCase().includes(provider.toLowerCase().replace(/\s+/g, '')) );
   const currentLink = currentDiv.createEl("a", {
-    cls: `provider-pill ${matchedProvider ? matchedProvider.toLowerCase() : ""}`,
-    text: matchedProvider || "Unknown",
-    href: currentUrl || "#",
+    cls: "provider-pill",
   });
+
+  updateCurrentPill(currentLink, frontmatter.url);
   currentLink.setAttr("title", "Open current source");
 
-  return currentLink;
+  // --- Reset Button ---
+  const resetBtn = new ButtonComponent(section);
+  resetBtn.setIcon("list-restart");
+  resetBtn.setClass("reset-cover-btn");
+  resetBtn.setTooltip("Reset all fields");
+
+  return {
+    updateCurrentPill,
+    currentLink,
+    transferBtn,
+    resetBtn
+  };
 }
 
 export function createEditableChipField(
@@ -118,7 +146,7 @@ export function createEditableChipField(
   // ---- Reset Button ----
   const resetBtn = new ButtonComponent(grid);
   resetBtn.setIcon("rotate-ccw");
-  resetBtn.setClass("reset-section-btn");
+  resetBtn.setClass("reset-cover-btn");
   resetBtn.onClick(() => {
     frontmatter[frontmatterKey] = [...(originalData[frontmatterKey] || [])];
     renderChips();
@@ -133,7 +161,12 @@ export function createEditableChipField(
 }
 
 
-export function createTextField(parent: HTMLElement, field: { label: string; key: keyof Book }, bookData: Book, frontmatter: Record<string, any>, originalData: Record<string, any>) {
+export function createTextField(
+  parent: HTMLElement, 
+  field: { label: string; key: keyof Book }, 
+  bookData: Book, 
+  frontmatter: Record<string, any>, 
+  originalData: Record<string, any>) {
   const wrapper = parent.createEl("div", { cls: "field-wrapper" });
   wrapper.createEl("label", { text: field.label, cls: "field-label" });
 
@@ -151,7 +184,7 @@ export function createTextField(parent: HTMLElement, field: { label: string; key
 
   const resetBtn = new ButtonComponent(grid);
   resetBtn.setIcon("rotate-ccw");
-  resetBtn.setClass("reset-section-btn");
+  resetBtn.setClass("reset-cover-btn");
   resetBtn.onClick(() => {
     frontmatter[field.key] = originalData[field.key];
     currentField.setValue(String(originalData[field.key] || ""));
@@ -181,7 +214,7 @@ export function createCoverSection(parent: HTMLElement, bookData: Book, frontmat
   const currentImgWrapper = grid.createDiv({ cls: "book-update-grid-item" });
   const currentImg = currentImgWrapper.createEl("img", {
     cls: "book-cover",
-    attr: { src: frontmatter.cover || "", alt: "Current Cover" }
+    attr: { src: frontmatter.cover || "https://bookstoreromanceday.org/wp-content/uploads/2020/08/book-cover-placeholder.png", alt: "Current Cover" }
   });
 
   const resetBtn = new ButtonComponent(grid);
@@ -223,7 +256,7 @@ export function createDescriptionSection(parent: HTMLElement, bookData: Book, fr
 
   const resetBtn = new ButtonComponent(grid);
   resetBtn.setIcon("rotate-ccw");
-  resetBtn.setClass("reset-section-btn");
+  resetBtn.setClass("reset-cover-btn");
 
   transferBtn.onClick(() => {
     frontmatter.description = bookData.description;

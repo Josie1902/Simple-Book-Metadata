@@ -381,6 +381,15 @@ input.textbox:focus {
   color: white;
   transform: translateY(-1px);
 }
+.provider-pill.unknown {
+  border: 1.5px solid #757679;
+  color: #757679;
+}
+.provider-pill.unknown:hover {
+  background-color: #757679;
+  color: white;
+  transform: translateY(-1px);
+}
 
 /* --- Left: cover --- */
 .book-left {

@@ -195,7 +195,7 @@ export class BookMetadataView extends ItemView {
 	    	type: "text",
 	    	placeholder: "Book title",
             cls: "textbox longer-field",
-            value: this.frontmatter?.title || ""
+            value: this.frontmatter?.title || this.file?.basename.replace(/_/g, " ") || ""
 	    });
 
         // Search using Author
