@@ -11,18 +11,13 @@ function cleanDescription(html: string): string {
 
 
 export async function scrapeBookDetails(item: any): Promise<Book> {
+  const bookId = item.id;
   const volumeInfo = item.volumeInfo || {};
   const title = volumeInfo.title || "";
   const authors = volumeInfo.authors ? volumeInfo.authors : [];
   const publishedDate = volumeInfo.publishedDate || "";
   const description = cleanDescription(volumeInfo.description || "");
-  const imageUrl = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : "https://bookstoreromanceday.org/wp-content/uploads/2020/08/book-cover-placeholder.png";
-  const imageRes = await requestUrl({
-    url: imageUrl,
-    method: "GET"
-  });
-  const blob = new Blob([imageRes.arrayBuffer]);
-  const objectUrl = URL.createObjectURL(blob);
+  const cover = `https://books.google.com/books/publisher/content/images/frontcover/${bookId}?fife=w300`
   const industryIdentifiers = volumeInfo.industryIdentifiers || [];
   const isbn13Obj = industryIdentifiers.find((id: any) => id.type === "ISBN_13");
   const isbn13 = isbn13Obj ? isbn13Obj.identifier : "";
@@ -41,7 +36,7 @@ export async function scrapeBookDetails(item: any): Promise<Book> {
       publisher,
       publicationDate: publishedDate,
       pages,
-      cover: objectUrl,
+      cover,
       genres,
       series,
       averageRating,
