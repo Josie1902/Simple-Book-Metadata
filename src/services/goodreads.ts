@@ -96,8 +96,8 @@ export async function scrapeBookDetails(bookUrl: string) {
   const authors = extractAuthors(bookData, apollo);
   const publicationTime = extractPublicationTime(bookData.details);
   const publicationDate = formatTimestampToDate(Number(publicationTime))
-  const isbn10 = bookData.details.isbn ?? ""
-  const isbn13 = bookData.details.isbn13 ?? ""
+  const isbn10 = bookData.details?.isbn ?? ""
+  const isbn13 = bookData.details?.isbn13 ?? ""
 
   const series = seriesKey ? apollo[seriesKey]?.title ?? "" : ""
 
