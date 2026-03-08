@@ -2,25 +2,26 @@ import { Book, renderBookCard } from "src/components/bookcard";
 import { ButtonComponent, ItemView, TFile, ViewStateResult, WorkspaceLeaf } from "obsidian";
 import { renderLoader, renderLoader2 } from "svgs/loading";
 import { renderWarning } from "svgs/warning";
-import { createGoodreadsProvider, createGoogleBooksProvider, createOpenLibraryProvider, BookProvider, BookQuery } from "src/providers";
+import { createGoodreadsProvider, createGoogleBooksProvider, createOpenLibraryProvider, BookProvider, BookQuery } from "src/createproviders";
 import { BookMetadataPluginSettings } from "../components/settings";
+import BookMetadataPlugin from "main";
 
 export const VIEW_TYPE_BOOK_METADATA = "book-metadata-view";
 
 interface BookMetadataViewState { 
-    settings: BookMetadataPluginSettings;
     file?: TFile | null; 
     frontmatter?: Record<string, any> | null; 
     [key: string]: unknown; 
 }
 
 export class BookMetadataView extends ItemView {
-    settings: BookMetadataPluginSettings;
+    plugin: BookMetadataPlugin;
     file: TFile | null = null;
     frontmatter: Record<string, any> | null = null;
 
-	constructor(leaf: WorkspaceLeaf) {
+	constructor(leaf: WorkspaceLeaf, plugin: BookMetadataPlugin) {
 		super(leaf);
+		this.plugin = plugin;
 	}
 
 	getViewType() {
@@ -36,7 +37,6 @@ export class BookMetadataView extends ItemView {
     }
 
     async setState(state: BookMetadataViewState, result: ViewStateResult): Promise<void> { 
-        this.settings = state.settings;
         if (state.file) { 
             this.file = state.file; 
         } else {
@@ -53,7 +53,6 @@ export class BookMetadataView extends ItemView {
 
     getState(): BookMetadataViewState {
         return {
-            settings: this.settings,
             file: this.file ?? null,
             frontmatter: this.frontmatter ?? null,
         };
@@ -63,7 +62,7 @@ export class BookMetadataView extends ItemView {
       this.file = null;
       this.frontmatter = null;
         
-      await this.setState({ settings: this.settings }, { history: false });
+      await this.setState({}, { history: false });
       this.refreshUI();
     }
 
@@ -277,15 +276,15 @@ export class BookMetadataView extends ItemView {
             const providerSearch: BookProvider[] = [];
 
             if (selectedProviders.has("Goodreads")) {
-                providerSearch.push(createGoodreadsProvider(this.app, this.settings, resultsSection, this.file ?? undefined, this.frontmatter ?? undefined));
+                providerSearch.push(createGoodreadsProvider(this.app, this.plugin.settings, resultsSection, this.file ?? undefined, this.frontmatter ?? undefined));
             }
 
             if (selectedProviders.has("Google")) {
-                providerSearch.push(createGoogleBooksProvider(this.app, this.settings, resultsSection, this.file ?? undefined, this.frontmatter ?? undefined));
+                providerSearch.push(createGoogleBooksProvider(this.app, this.plugin.settings, resultsSection, this.file ?? undefined, this.frontmatter ?? undefined));
             }
 
             if (selectedProviders.has("OpenLibrary")) {
-                providerSearch.push(createOpenLibraryProvider(this.app, this.settings, resultsSection, this.file ?? undefined, this.frontmatter ?? undefined));
+                providerSearch.push(createOpenLibraryProvider(this.app, this.plugin.settings, resultsSection, this.file ?? undefined, this.frontmatter ?? undefined));
             }
 
             await Promise.all(
@@ -336,7 +335,7 @@ export class BookMetadataView extends ItemView {
                 total += books.length;
             
                 books.forEach((book) => {
-                    renderBookCard(view.app, view.settings, resultsSection, book, provider, view.file ?? undefined, view.frontmatter ?? undefined);
+                    renderBookCard(view.app, view.plugin.settings, resultsSection, book, provider, view.file ?? undefined, view.frontmatter ?? undefined);
                 });
             });
         

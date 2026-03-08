@@ -12,7 +12,7 @@ export default class BookMetadataPlugin extends Plugin {
 
 		this.registerView(
 			VIEW_TYPE_BOOK_METADATA,
-			(leaf) => new BookMetadataView(leaf)
+			(leaf) => new BookMetadataView(leaf, this)
 		);
 
 		this.addRibbonIcon("book", "Search Book Metadata", async () => {
@@ -90,7 +90,6 @@ export default class BookMetadataPlugin extends Plugin {
 	            type: VIEW_TYPE_BOOK_METADATA,
 	            active: true,
 	            state: {
-					settings: this.settings,
 	                file: file,
 	                frontmatter
 	            }
@@ -104,9 +103,6 @@ export default class BookMetadataPlugin extends Plugin {
 	        await existingLeaf.setViewState({
 	            type: VIEW_TYPE_BOOK_METADATA,
 	            active: true,
-				state: {
-					settings: this.settings,
-				}
 	        });
 	        this.app.workspace.revealLeaf(existingLeaf);
 	        return;
@@ -119,7 +115,6 @@ export default class BookMetadataPlugin extends Plugin {
 	        type: VIEW_TYPE_BOOK_METADATA,
 	        active: true,
 	        state: {
-				settings: this.settings,
 	            file: file ? file : null,
 	            frontmatter
 	        }
