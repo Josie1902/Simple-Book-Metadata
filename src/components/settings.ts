@@ -3,14 +3,16 @@ import BookMetadataPlugin from "main";
 
 export interface BookMetadataPluginSettings {
     folderPath: string;
-    googleApiKey: string;
     bookStatus: string;
+    googleApiKey: string;
+    additionalServices: {}
 }
 
 export const DEFAULT_SETTINGS: BookMetadataPluginSettings = {
     folderPath: "",
     googleApiKey: "",
     bookStatus: "🔴 Not Started",
+    additionalServices: {}
 };
 
 export class BookMetadataPluginSettingTab extends PluginSettingTab {
@@ -73,5 +75,8 @@ export class BookMetadataPluginSettingTab extends PluginSettingTab {
                     await this.plugin.saveSettings();
                 })
             );
+
+        containerEl.createEl("h2", { text: "Additional Services" });
+        containerEl.createEl("p", { text: "Coming soon...", cls: "settings-item-description" });
     }
 }
