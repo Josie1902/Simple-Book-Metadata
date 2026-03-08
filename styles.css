@@ -1,5 +1,5 @@
 /* === Settings === */
-.setting-item-description {
+.settings-item-description {
     font-size: var(--font-ui-small);
     color: var(--text-muted);
     margin-bottom: 4px;
@@ -74,7 +74,8 @@ input.textbox:focus {
 /* ---  Select Provider Dropdown --- */
 .multi-select-dropdown {
 	position: relative;
-	width: 240px;
+  min-width: 250px;
+	width: fit-content;
 }
 
 .dropdown-label {
