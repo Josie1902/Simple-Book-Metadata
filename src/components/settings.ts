@@ -1,18 +1,38 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import BookMetadataPlugin from "main";
+import { JsonInputModal } from "src/modals/jsoninput";
 
 export interface BookMetadataPluginSettings {
     folderPath: string;
     bookStatus: string;
     googleApiKey: string;
-    additionalServices: {}
+    additionalServices: {
+        importLibraryThing: {
+            updateFields: {
+                books_id: boolean;
+                isbn: boolean;
+            }
+            logicOperator: "AND" | "OR";
+            selectFolders: string[];
+        }
+    }
 }
+
 
 export const DEFAULT_SETTINGS: BookMetadataPluginSettings = {
     folderPath: "",
     googleApiKey: "",
     bookStatus: "🔴 Not Started",
-    additionalServices: {}
+    additionalServices: {
+        importLibraryThing: {
+            updateFields: {
+                books_id: false,
+                isbn: false,
+            },
+            logicOperator: "AND",
+            selectFolders: []
+        }
+    }
 };
 
 export class BookMetadataPluginSettingTab extends PluginSettingTab {
@@ -76,7 +96,70 @@ export class BookMetadataPluginSettingTab extends PluginSettingTab {
                 })
             );
 
-        containerEl.createEl("h2", { text: "Additional Services" });
-        containerEl.createEl("p", { text: "Coming soon...", cls: "settings-item-description" });
+        containerEl.createEl("hr");
+
+        const libraryThingUpdate = containerEl.createDiv({cls: "settings-section"})
+
+        libraryThingUpdate.createEl("h2", { text: "LibraryThing Import Settings" });
+        libraryThingUpdate.createEl("p", { text: "Select which fields to update in frontmatter when importing from LibraryThing. You can also specify logic for how conditions are applied and which folders to target.", cls: "setting-item-description" });
+        libraryThingUpdate.createEl("p", { text: "Note: Updating frontmatter will overwrite existing values. Skip this section to disable frontmatter updates.", cls: "settings-item-description-danger" });
+
+        let logicOperator: "AND" | "OR" = "AND";
+
+        // Checkbox for each filter
+        type FilterKey = keyof typeof this.plugin.settings.additionalServices.importLibraryThing.updateFields;
+        const updateFields = this.plugin.settings.additionalServices.importLibraryThing.updateFields;
+
+        (Object.keys(updateFields) as FilterKey[]).forEach(key => {
+          new Setting(libraryThingUpdate)
+            .setName(`Update ${key}`)
+            .setDesc(`Update frontmatter with ${key} from import results`)
+            .addToggle(toggle =>
+              toggle.setValue(updateFields[key]).onChange(async value => {
+                updateFields[key] = value;
+                this.plugin.settings.additionalServices.importLibraryThing.updateFields[key] = value;
+                await this.plugin.saveSettings();
+              })
+            );
+        });
+
+        // AND / OR dropdown
+        new Setting(libraryThingUpdate)
+          .setName("Update Logic")
+          .setDesc("Should all selected conditions match (AND) or any (OR)?")
+          .addDropdown(dropdown =>
+            dropdown
+              .addOption("AND", "AND")
+              .addOption("OR", "OR")
+              .setValue(logicOperator)
+              .onChange(async value => {
+                logicOperator = value as "AND" | "OR";
+                this.plugin.settings.additionalServices.importLibraryThing.logicOperator = logicOperator;
+                await this.plugin.saveSettings();
+              })
+        );
+
+        new Setting(libraryThingUpdate)
+        .setName("Enter folders to update frontmatter from import")
+        .setDesc("Comma-separated list of folder paths. For example: 'Folder1, Folder2'. Leave empty to disable updating frontmatter.")
+        .addText(text => text
+          .setPlaceholder("e.g., Folder1, Folder2")
+          .setValue(this.plugin.settings.additionalServices.importLibraryThing.selectFolders?.join(", ") || "")
+          .onChange(async (value) => {
+            this.plugin.settings.additionalServices.importLibraryThing.selectFolders = value.split(",").map(s => s.trim()).filter((s): s is string => !!s);
+            await this.plugin.saveSettings();
+          })
+        );
+
+        new Setting(containerEl)
+          .setName("Import LibraryThing metadata")
+          .setDesc("Select a JSON file and select rows for import")
+          .addButton(button =>
+            button
+              .setButtonText("Open Import Modal")
+              .onClick(() => {
+                new JsonInputModal(this.app, this.plugin).open();
+              })
+        );
     }
 }
