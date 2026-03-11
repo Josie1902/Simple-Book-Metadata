@@ -1,13 +1,6 @@
 import { App, normalizePath, Notice } from "obsidian";
 import { BookMetadataPluginSettings } from "./components/settings";
-
-function sanitizeFileName(name: string): string {
-  return name
-    .replace(/[\\/:*?"<>|]/g, "") // remove illegal characters
-    .replace(/\s+/g, " ")         // collapse multiple spaces
-    .trim()                        // trim edges
-    .replace(/\.+$/, "");          // remove trailing dots
-}
+import { sanitizeFileName } from "./utils";
 
 export async function createBookPage(app: App, settings: BookMetadataPluginSettings, bookData: any) {
   const fileName = `${sanitizeFileName(bookData.title) || "Untitled Book"}.md`;
