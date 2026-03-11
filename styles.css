@@ -5,6 +5,20 @@
     margin-bottom: 4px;
 }
 
+.settings-item-description-danger {
+  font-size: var(--font-ui-small);
+  color: var(--color-red);
+  margin-bottom: 4px;
+}
+
+.settings-section {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  padding: 12px;
+  background-color: var(--background-primary);
+  margin: 12px 0
+}
+
 /* === Metadata Search Section === */
 .book-metadata-section {
 	display: flex;
@@ -603,4 +617,46 @@ input.textbox:focus {
 /* --- Save / Reset Buttons --- */
 /* using .save-wrapper, .save-btn and .reset-btn */
 
+/* === Settings JSON Input Modal === */
+.json-table-container {
+  max-height: 350px;      
+  max-width: 100%;        
+  overflow: auto;         
+  padding: 4px;
+  margin: 16px 0
+}
 
+/* --- Table styling ---*/
+.json-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* --- Table header & cells --- */
+.json-table th,
+.json-table td {
+  border: 1px solid var(--background-modifier-border);
+  padding: 6px 8px;
+  white-space: nowrap;      
+}
+
+/* --- Header --- */
+.json-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--background-primary);
+  z-index: 1;
+}
+
+/* --- Import Log --- */
+/* Note: Container for displaying import status and messages like created pages or skipped entries */
+.import-log {
+  max-height: 100px;
+  overflow-y: auto;
+  margin: 12px 0;
+  padding: 8px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  background-color: var(--background-primary);
+  font-size: 0.85em;
+}
